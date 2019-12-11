@@ -5,9 +5,14 @@
   "license": "MIT",
   "devDependencies": {
     "prettier": "^1.19.1",
-    "prisma2": "^2.0.0-preview018"
+    "prisma2": "^2.0.0-preview018.1"
   },
   "dependencies": {
-    "@prisma/photon": "^2.0.0-preview018"
+    "@prisma/get-platform": "^0.1.23",
+    "@prisma/photon": "^2.0.0-preview018.1",
+    "globby": "^10.0.1"
+  },
+  "scripts": {
+    "postinstall": "prisma2 generate"
   }
 }

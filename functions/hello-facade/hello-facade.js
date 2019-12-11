@@ -1,29 +1,25 @@
 const { Photon } = require('@prisma/photon')
-const { spawn } = require('child_process')
+process.env.DEBUG = '*'
+const { getPlatform } = require('@prisma/get-platform')
+const globby = require('globby')
 
-const photon = new Photon()
+// const photon = new Photon()
+
+if (false) {
+  require('@prisma/photon/runtime/query-engine-rhel-openssl-1.0.x')
+}
 
 // Docs on event and context https://www.netlify.com/docs/functions/#the-handler-method
 exports.handler = async (event, context) => {
   try {
-    const os = spawn('cat', ['/etc/os-release'])
-    os.stdout.on('data', data => {
-      console.log(`stdout: ${data}`)
-    })
-
-    os.stderr.on('data', data => {
-      console.error(`stderr: ${data}`)
-    })
-
-    os.on('close', code => {
-      console.log(`child process exited with code ${code}`)
-    })
-
-    const data = await photon.users.findMany()
-    console.log({ data })
+    const platform = await getPlatform()
+    console.log(platform)
+    const files = await globby(['node_modules/@prisma/photon/**/*'])
+    // const data = await photon.users.findMany()
+    // console.log({ data })
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: data }),
+      body: JSON.stringify({ message: platform, files }),
       // // more keys you can return:
       // headers: { "headerName": "headerValue", ... },
       // isBase64Encoded: true,
